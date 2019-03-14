@@ -1,10 +1,27 @@
 import speech_recognition as sr
+import time
 
 def speechToText():
+
+    #Initialize the recognizer
     r = sr.Recognizer()
-    mic = sr.Microphone(device_index=0)
+
+    #Use Sample Rate of 16000 Hz as recommended, device index refers to input for the mic"
+    mic = sr.Microphone(device_index=0, sample_rate = 16000, chunk_size = 2048)
+
     with mic as source:
-        audio = r.listen(source)
-        print(r.recognize_google(audio,show_all = True))
+        #Adjust energy threshold
+        r.adjust_for_ambient_noise(source, duration=1)
+
+    while(1):
+        with mic as source:
+            print("Listening: \n")
+            audio = r.listen(source)
+            print("Analyzing: \n")
+            try:
+                message = r.recognize_google(audio)
+                print(message)
+            except sr.UnknownValueError:
+                print("Unrecognizable")
 
 speechToText()
