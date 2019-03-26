@@ -1,7 +1,11 @@
 import speech_recognition as sr
 import time
+import laughtrain
+import laughpred as lp
 
 def speechToText():
+    #Initialize Model
+    model = laughtrain.fit()
 
     #Initialize the recognizer
     r = sr.Recognizer()
@@ -20,7 +24,7 @@ def speechToText():
             print("Analyzing: \n")
             try:
                 message = r.recognize_google(audio)
-                print(message)
+                print(lp.pred(model, message))
             except sr.UnknownValueError:
                 print("Unrecognizable")
 
